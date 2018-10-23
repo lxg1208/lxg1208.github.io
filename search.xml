@@ -3,6 +3,29 @@
   
     
     <entry>
+      <title>读书笔记：《深入理解Java虚拟机》——序</title>
+      <link href="/2018/10/13/2018-10-13-notes-understand-jvm-0.html"/>
+      <url>/2018/10/13/2018-10-13-notes-understand-jvm-0.html</url>
+      <content type="html"><![CDATA[<p>其实老早就在多看上买了这本书的电子版，总感觉看电子书没有感觉（算是给自己懒找个借口吧），后来赶上当当活动，入手了纸质版，现在终于一口气看完了。合上书回想一下，感觉收获不少，但也有种不踏实的感觉，不写点什么巩固一下记忆总怕自己转眼就忘干净了，所以就有了这个分类，督促自己要养成这个好习惯，边读边记笔记，而不是后补。</p>]]></content>
+      
+      <categories>
+          
+          <category> Reading Notes </category>
+          
+          <category> 深入理解Java虚拟机 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> H&lt;sub&gt;2&lt;/sub&gt;O </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>Spring Boot基于iReport使用自定义数据导出复杂PDF</title>
       <link href="/2018/10/10/2018-10-10-export-pdf-by-ireport-with-jrdatasource.html"/>
       <url>/2018/10/10/2018-10-10-export-pdf-by-ireport-with-jrdatasource.html</url>
