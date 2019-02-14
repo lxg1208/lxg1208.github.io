@@ -6,10 +6,10 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#222">
 
 
@@ -27,8 +27,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -47,7 +47,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -81,9 +81,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
@@ -101,7 +101,7 @@
 
 
 
-  <meta name="keywords" content="Spring,properties," />
+  <meta name="keywords" content="Spring,properties,">
 
 
 
@@ -112,18 +112,18 @@
 
 
 
-<meta name="description" content="我们都知道Spring可以注入各种对象，而有些时候，我们需要注入一些配置项，而不是一个对象。可以发现Spring提供了一个PreferencesPlaceholderConfigurer类，可以方便的让我们使用注解将properties中的配置信息注入到对象中。">
+<meta name="description" content="我们都知道Spring可以注入各种对象，而有些时候，我们需要注入一些配置项，而不是一个对象。 可以发现Spring提供了一个PreferencesPlaceholderConfigurer类，可以方便的让我们使用注解将properties中的配置信息注入到对象中。">
 <meta name="keywords" content="Spring,properties">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring注入Properties文件中的配置">
 <meta property="og:url" content="https://blog.wellcoding.win/2017/05/10/2017-05-10-spring-inject-properties.html">
 <meta property="og:site_name" content="旺旺小学酥的博客">
-<meta property="og:description" content="我们都知道Spring可以注入各种对象，而有些时候，我们需要注入一些配置项，而不是一个对象。可以发现Spring提供了一个PreferencesPlaceholderConfigurer类，可以方便的让我们使用注解将properties中的配置信息注入到对象中。">
+<meta property="og:description" content="我们都知道Spring可以注入各种对象，而有些时候，我们需要注入一些配置项，而不是一个对象。 可以发现Spring提供了一个PreferencesPlaceholderConfigurer类，可以方便的让我们使用注解将properties中的配置信息注入到对象中。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-06-01T08:40:45.000Z">
+<meta property="og:updated_time" content="2019-02-14T02:52:39.262Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring注入Properties文件中的配置">
-<meta name="twitter:description" content="我们都知道Spring可以注入各种对象，而有些时候，我们需要注入一些配置项，而不是一个对象。可以发现Spring提供了一个PreferencesPlaceholderConfigurer类，可以方便的让我们使用注解将properties中的配置信息注入到对象中。">
+<meta name="twitter:description" content="我们都知道Spring可以注入各种对象，而有些时候，我们需要注入一些配置项，而不是一个对象。 可以发现Spring提供了一个PreferencesPlaceholderConfigurer类，可以方便的让我们使用注解将properties中的配置信息注入到对象中。">
 
 
 
@@ -153,7 +153,7 @@
 
 
 
-  <link rel="canonical" href="https://blog.wellcoding.win/2017/05/10/2017-05-10-spring-inject-properties.html"/>
+  <link rel="canonical" href="https://blog.wellcoding.win/2017/05/10/2017-05-10-spring-inject-properties.html">
 
 
 
@@ -190,7 +190,7 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
   
   
@@ -200,13 +200,13 @@
   <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">旺旺小学酥的博客</span>
         <span class="logo-line-after"><i></i></span>
@@ -236,7 +236,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -246,7 +246,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -256,7 +256,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -266,7 +266,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -276,7 +276,7 @@
         <li class="menu-item menu-item-sitemap">
           <a href="/sitemap.xml" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
             
             站点地图
           </a>
@@ -289,7 +289,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -310,9 +310,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -344,20 +342,20 @@
   
   
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://blog.wellcoding.win/2017/05/10/2017-05-10-spring-inject-properties.html">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="旺旺小学酥">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/logo.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="旺旺小学酥的博客">
     </span>
 
@@ -389,7 +387,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -400,7 +398,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
                   <a href="/categories/Coding/" itemprop="url" rel="index">
                     <span itemprop="name">Coding</span>
                   </a>
@@ -411,7 +409,7 @@
                   ， 
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
                   <a href="/categories/Coding/Java/" itemprop="url" rel="index">
                     <span itemprop="name">Java</span>
                   </a>
@@ -459,10 +457,16 @@
       
 
       
-        <p>我们都知道Spring可以注入各种对象，而有些时候，我们需要注入一些配置项，而不是一个对象。<br>可以发现Spring提供了一个<code>PreferencesPlaceholderConfigurer</code>类，可以方便的让我们使用注解将properties中的配置信息注入到对象中。<br><a id="more"></a><br>具体操作如下：</p>
-<p>创建一个Maven项目，添加Spring Context依赖。<br>在Spring上下文的配置文件中声明<code>org.springframework.beans.factory.config.PropertiesFactoryBean</code>和<code>org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer</code>的实例。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"configProperties"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">class</span>=<span class="string">"org.springframework.beans.factory.config.PropertiesFactoryBean"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"locations"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">list</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">value</span>&gt;</span>classpath*:*.properties<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">list</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"propertyConfigurer"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">class</span>=<span class="string">"org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"properties"</span> <span class="attr">ref</span>=<span class="string">"configProperties"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>然后在Java代码中使用<code>@Value</code>注解来取值。注意：相应的Java类也需要使用<code>@Service</code>、<code>@Component</code>等声明由Spring管理。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Value</span>(<span class="string">"#&#123;configProperties['mysql.url']&#125;"</span>)</span><br><span class="line"><span class="keyword">private</span> String url;</span><br></pre></td></tr></table></figure></p>
-<p>注解中的value值<code>#{configProperties[&#39;mysql.url&#39;]}</code>中的<code>configProperties</code>就是Spring上下文中<code>org.springframework.beans.factory.config.PropertiesFactoryBean</code>的实例ID，<code>mysql.url</code>就是properties中配置的key。</p>
+        <p>我们都知道Spring可以注入各种对象，而有些时候，我们需要注入一些配置项，而不是一个对象。</p>
+<p>可以发现Spring提供了一个<code>PreferencesPlaceholderConfigurer</code>类，可以方便的让我们使用注解将properties中的配置信息注入到对象中。</p>
+<a id="more"></a>
+<p>具体操作如下：</p>
+<p>创建一个Maven项目，添加Spring Context依赖。</p>
+<p>在Spring上下文的配置文件中声明<code>org.springframework.beans.factory.config.PropertiesFactoryBean</code>和<code>org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer</code>的实例。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"configProperties"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">class</span>=<span class="string">"org.springframework.beans.factory.config.PropertiesFactoryBean"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"locations"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">list</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">value</span>&gt;</span>classpath*:*.properties<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">list</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"propertyConfigurer"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">class</span>=<span class="string">"org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"properties"</span> <span class="attr">ref</span>=<span class="string">"configProperties"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后在Java代码中使用<code>@Value</code>注解来取值。注意：相应的Java类也需要使用<code>@Service</code>、<code>@Component</code>等声明由Spring管理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Value</span>(<span class="string">"#&#123;configProperties['mysql.url']&#125;"</span>)</span><br><span class="line"><span class="keyword">private</span> String url;</span><br></pre></td></tr></table></figure>
+<p>注解中的value值<code>#{configProperties['mysql.url']}</code>中的<code>configProperties</code>就是Spring上下文中<code>org.springframework.beans.factory.config.PropertiesFactoryBean</code>的实例ID，<code>mysql.url</code>就是properties中配置的key。</p>
 
       
     </div>
@@ -498,9 +502,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Spring/" rel="tag"># Spring</a>
+            <a href="/tags/Spring/" rel="tag"><i class="fa fa-tag"></i> Spring</a>
           
-            <a href="/tags/properties/" rel="tag"># properties</a>
+            <a href="/tags/properties/" rel="tag"><i class="fa fa-tag"></i> properties</a>
           
         </div>
       
@@ -583,11 +587,9 @@
 
       <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/images/logo.jpg"
-                alt="旺旺小学酥" />
+              <img class="site-author-image" itemprop="image" src="/images/logo.jpg" alt="旺旺小学酥">
             
               <p class="site-author-name" itemprop="name">旺旺小学酥</p>
               <p class="site-description motion-element" itemprop="description"></p>
@@ -600,7 +602,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -622,7 +624,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -666,7 +668,7 @@
           
             <div class="cc-license motion-element" itemprop="license">
               <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
-                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
               </a>
             </div>
           
@@ -693,7 +695,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

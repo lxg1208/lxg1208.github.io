@@ -6,10 +6,10 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#222">
 
 
@@ -27,8 +27,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -47,7 +47,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -81,9 +81,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
@@ -101,7 +101,7 @@
 
 
 
-  <meta name="keywords" content="数据库连接池,Druid," />
+  <meta name="keywords" content="数据库连接池,Druid,">
 
 
 
@@ -112,18 +112,18 @@
 
 
 
-<meta name="description" content="项目数据库连接池准备用Druid，但是网上搜的配置信息都不一样，都比较乱。最终在官方GitHub文档上找到了各个配置项的说明，整理了一下，留着备忘。">
+<meta name="description" content="项目数据库连接池准备用Druid，但是网上搜的配置信息都不一样，都比较乱。 最终在官方GitHub文档上找到了各个配置项的说明，整理了一下，留着备忘。">
 <meta name="keywords" content="数据库连接池,Druid">
 <meta property="og:type" content="article">
 <meta property="og:title" content="阿里数据库连接池Druid配置整理，带注释">
 <meta property="og:url" content="https://blog.wellcoding.win/2017/05/10/2017-05-10-druid.html">
 <meta property="og:site_name" content="旺旺小学酥的博客">
-<meta property="og:description" content="项目数据库连接池准备用Druid，但是网上搜的配置信息都不一样，都比较乱。最终在官方GitHub文档上找到了各个配置项的说明，整理了一下，留着备忘。">
+<meta property="og:description" content="项目数据库连接池准备用Druid，但是网上搜的配置信息都不一样，都比较乱。 最终在官方GitHub文档上找到了各个配置项的说明，整理了一下，留着备忘。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-06-01T08:40:37.000Z">
+<meta property="og:updated_time" content="2019-02-14T02:52:39.317Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阿里数据库连接池Druid配置整理，带注释">
-<meta name="twitter:description" content="项目数据库连接池准备用Druid，但是网上搜的配置信息都不一样，都比较乱。最终在官方GitHub文档上找到了各个配置项的说明，整理了一下，留着备忘。">
+<meta name="twitter:description" content="项目数据库连接池准备用Druid，但是网上搜的配置信息都不一样，都比较乱。 最终在官方GitHub文档上找到了各个配置项的说明，整理了一下，留着备忘。">
 
 
 
@@ -153,7 +153,7 @@
 
 
 
-  <link rel="canonical" href="https://blog.wellcoding.win/2017/05/10/2017-05-10-druid.html"/>
+  <link rel="canonical" href="https://blog.wellcoding.win/2017/05/10/2017-05-10-druid.html">
 
 
 
@@ -190,7 +190,7 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
   
   
@@ -200,13 +200,13 @@
   <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">旺旺小学酥的博客</span>
         <span class="logo-line-after"><i></i></span>
@@ -236,7 +236,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -246,7 +246,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -256,7 +256,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -266,7 +266,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -276,7 +276,7 @@
         <li class="menu-item menu-item-sitemap">
           <a href="/sitemap.xml" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
             
             站点地图
           </a>
@@ -289,7 +289,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -310,9 +310,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -344,20 +342,20 @@
   
   
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://blog.wellcoding.win/2017/05/10/2017-05-10-druid.html">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="旺旺小学酥">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/logo.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="旺旺小学酥的博客">
     </span>
 
@@ -389,7 +387,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -400,7 +398,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
                   <a href="/categories/Coding/" itemprop="url" rel="index">
                     <span itemprop="name">Coding</span>
                   </a>
@@ -411,7 +409,7 @@
                   ， 
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
                   <a href="/categories/Coding/Java/" itemprop="url" rel="index">
                     <span itemprop="name">Java</span>
                   </a>
@@ -459,7 +457,9 @@
       
 
       
-        <p>项目数据库连接池准备用Druid，但是网上搜的配置信息都不一样，都比较乱。<br>最终在<a href="https://github.com/alibaba/druid/wiki" target="_blank" rel="noopener">官方GitHub文档</a>上找到了各个配置项的说明，整理了一下，留着备忘。<br><a id="more"></a></p>
+        <p>项目数据库连接池准备用Druid，但是网上搜的配置信息都不一样，都比较乱。</p>
+<p>最终在<a href="https://github.com/alibaba/druid/wiki" target="_blank" rel="noopener">官方GitHub文档</a>上找到了各个配置项的说明，整理了一下，留着备忘。</p>
+<a id="more"></a>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"># 数据库JDBC驱动</span><br><span class="line">jdbc.driverClassName=com.mysql.jdbc.Driver</span><br><span class="line"># 数据库链接字符串</span><br><span class="line">jdbc.url=jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&amp;characterEncoding=UTF-8</span><br><span class="line"># 用户名</span><br><span class="line">jdbc.username=root</span><br><span class="line"># 密码</span><br><span class="line">jdbc.password=root</span><br><span class="line"># 检测数据库链接是否有效用带SQL，必须配置</span><br><span class="line">jdbc.validationQuery=SELECT 1</span><br><span class="line"># 单位：秒，检测连接是否有效的超时时间。</span><br><span class="line">3 底层调用jdbc Statement对象的void setQueryTimeout(int seconds)方法</span><br><span class="line">jdbc.validationQueryTimeout=3</span><br><span class="line"># 是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。</span><br><span class="line"># 在mysql下建议关闭。</span><br><span class="line">jdbc.poolPreparedStatements=false</span><br><span class="line"># 要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。</span><br><span class="line"># 在Druid中，不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100</span><br><span class="line">jdbc.maxPoolPreparedStatementPerConnectionSize=-1</span><br><span class="line"># 初始化时建立物理连接的个数。初始化发生在显示调用init方法，或者第一次getConnection时</span><br><span class="line">jdbc.initialSize=3</span><br><span class="line"># 最大连接池数量</span><br><span class="line">jdbc.maxActive=10</span><br><span class="line"># 已经不再使用，配置了也没效果</span><br><span class="line">#jdbc.maxIdle=20</span><br><span class="line"># 最小连接池数量</span><br><span class="line">jdbc.minIdle=0</span><br><span class="line"># 获取连接时最大等待时间，单位毫秒。配置了maxWait之后，缺省启用公平锁，并发效率会有所下降。</span><br><span class="line"># 如果需要可以通过配置useUnfairLock属性为true使用非公平锁。</span><br><span class="line">jdbc.maxWait=60000</span><br><span class="line"># 申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。</span><br><span class="line">jdbc.testOnBorrow=false</span><br><span class="line"># 归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。</span><br><span class="line">jdbc.testOnReturn=false</span><br><span class="line"># 建议配置为true，不影响性能，并且保证安全性。</span><br><span class="line"># 申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。</span><br><span class="line">jdbc.testWhileIdle=true</span><br><span class="line"># 1.Destroy线程会检测连接的间隔时间，如果连接空闲时间大于等于minEvictableIdleTimeMillis则关闭物理连接。</span><br><span class="line"># 2.estWhileIdle的判断依据，详细看testWhileIdle属性的说明</span><br><span class="line">jdbc.timeBetweenEvictionRunsMillis=60000</span><br><span class="line"># 不再使用，一个DruidDataSource只支持一个EvictionRun</span><br><span class="line">jdbc.numTestsPerEvictionRun=1800000</span><br><span class="line"># 连接保持空闲而不被驱逐的最长时间，即连接的生存时间</span><br><span class="line">jdbc.minEvictableIdleTimeMillis=300000</span><br><span class="line"># 物理连接初始化的时候执行的sql</span><br><span class="line">jdbc.connectionInitSqls=</span><br><span class="line"># 当数据库抛出一些不可恢复的异常时，抛弃连接，根据dbType自动识别，不需要配</span><br><span class="line">jdbc.exceptionSorter=</span><br><span class="line"># Druid的强大之处，过滤器属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有：</span><br><span class="line"># 监控统计用的filter:stat</span><br><span class="line"># 日志用的filter:log4j</span><br><span class="line"># 防御sql注入的filter:wall</span><br><span class="line">jdbc.filters=filter:wall</span><br><span class="line"></span><br><span class="line">#链接使用超过时间限制是否回收</span><br><span class="line">jdbc.removeAbandoned=true</span><br><span class="line">#超过时间限制时间（单位秒），目前为5分钟，如果有业务处理时间超过5分钟，可以适当调整。</span><br><span class="line">jdbc.removeAbandonedTimeout=300</span><br><span class="line">#链接回收的时候控制台打印信息，测试环境可以加上true，线上环境false。会影响性能。</span><br><span class="line">jdbc.logAbandoned=false</span><br></pre></td></tr></table></figure>
 <p>常用数据库validationQuery检查语句</p>
 <table>
@@ -539,9 +539,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/数据库连接池/" rel="tag"># 数据库连接池</a>
+            <a href="/tags/数据库连接池/" rel="tag"><i class="fa fa-tag"></i> 数据库连接池</a>
           
-            <a href="/tags/Druid/" rel="tag"># Druid</a>
+            <a href="/tags/Druid/" rel="tag"><i class="fa fa-tag"></i> Druid</a>
           
         </div>
       
@@ -624,11 +624,9 @@
 
       <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/images/logo.jpg"
-                alt="旺旺小学酥" />
+              <img class="site-author-image" itemprop="image" src="/images/logo.jpg" alt="旺旺小学酥">
             
               <p class="site-author-name" itemprop="name">旺旺小学酥</p>
               <p class="site-description motion-element" itemprop="description"></p>
@@ -641,7 +639,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -663,7 +661,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -707,7 +705,7 @@
           
             <div class="cc-license motion-element" itemprop="license">
               <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
-                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
               </a>
             </div>
           
@@ -734,7 +732,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
