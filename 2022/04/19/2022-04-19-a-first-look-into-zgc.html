@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/favicon.ico" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  
+  <link rel="stylesheet" href="/lib/animate-css/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.min.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.wellcoding.win","root":"/","scheme":"Pisces","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="一、ZGC 介绍 ZGC（Z Garbage Collector）是一种可扩展的低延迟垃圾收集器，旨在满足以下目标：  亚毫秒最大停顿时间[1]（Sub-millisecond max pause times）； 停顿时间不会随着堆的大小，或者活跃对象的大小而增加（Pause times do not increase with the heap, live-set or root-set siz">
+<meta property="og:type" content="article">
+<meta property="og:title" content="技术分享：初识ZGC">
+<meta property="og:url" content="https://blog.wellcoding.win/2022/04/19/2022-04-19-a-first-look-into-zgc.html">
+<meta property="og:site_name" content="旺旺小学酥的博客">
+<meta property="og:description" content="一、ZGC 介绍 ZGC（Z Garbage Collector）是一种可扩展的低延迟垃圾收集器，旨在满足以下目标：  亚毫秒最大停顿时间[1]（Sub-millisecond max pause times）； 停顿时间不会随着堆的大小，或者活跃对象的大小而增加（Pause times do not increase with the heap, live-set or root-set siz">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.plantuml.com/plantuml/svg/SoWkIImgAStDuKfCJyqhKNWnSzQpxlbFsrgVhftXcrYKdPfYW5F648jCK6fkOa51QWeNLqfYIM9IOd6gmlFEbSydj46akRYAI_ABWDeKdkwQydpAYgVzwryiRuJ9OOefwEhQONKJqKeDYL4ATpKMgy2AKVo0nHByYc36OwfoICrB0GO-0000">
+<meta property="og:image" content="https://www.plantuml.com/plantuml/svg/SoWkIImgAStDuU82ixYiNgpV_RH_sjC5RKzsh7q-g-Nf-fqlDYwq1ehld_sqTIb8TcF_orbphBcuCjCKD9xEsV1qRiEBvMrFP-zxlhRpoQw-ftidF-tiXOYytpDVKw4a8pLFGUFPZFMQN0eALi-cBtWvf-7fafRd4zgikL9pYbE1XanO1f9JK02P-6pjugTpLhpOk-RvyjsO-a40vXImacUJUv_i1Re6985c6jp46Uk1Oa_tx7gwP-hpAIkm6ufayBC5xI_MRK0s68VXS1qlstkVhflrP6ylXgQybCmqBWGBGWA3Eh-0Yyi1o0E6F000">
+<meta property="article:published_time" content="2022-04-19T10:53:28.000Z">
+<meta property="article:modified_time" content="2023-03-06T10:40:56.233Z">
+<meta property="article:author" content="旺旺小学酥">
+<meta property="article:tag" content="Sharing">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="GC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.plantuml.com/plantuml/svg/SoWkIImgAStDuKfCJyqhKNWnSzQpxlbFsrgVhftXcrYKdPfYW5F648jCK6fkOa51QWeNLqfYIM9IOd6gmlFEbSydj46akRYAI_ABWDeKdkwQydpAYgVzwryiRuJ9OOefwEhQONKJqKeDYL4ATpKMgy2AKVo0nHByYc36OwfoICrB0GO-0000">
+
+<link rel="canonical" href="https://blog.wellcoding.win/2022/04/19/2022-04-19-a-first-look-into-zgc.html">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>技术分享：初识ZGC | 旺旺小学酥的博客</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-123964199-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-123964199-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7b41f0927690271aa5c3edb61350f723";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">旺旺小学酥的博客</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">25</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#"><span class="nav-number">1.</span> <span class="nav-text">一、ZGC 介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#"><span class="nav-number">2.</span> <span class="nav-text">二、GC过程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#"><span class="nav-number">3.</span> <span class="nav-text">三、关键技术</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-内存多重映射"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 内存多重映射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-染色指针"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 染色指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-内存布局"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 内存布局</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-读屏障-load-barrier"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 读屏障(Load Barrier)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-堆栈水印屏障-stack-watermark-barrier"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 堆栈水印屏障(Stack Watermark Barrier)</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="旺旺小学酥"
+      src="/images/logo.jpg">
+  <p class="site-author-name" itemprop="name">旺旺小学酥</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/2512933077" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;2512933077" rel="noopener" target="_blank"><i class="weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=x3x37fab&productCode=vm&utm_source=x3x37fab" title="阿里云幸运券 → https:&#x2F;&#x2F;promotion.aliyun.com&#x2F;ntms&#x2F;act&#x2F;ambassador&#x2F;sharetouser.html?userCode&#x3D;x3x37fab&amp;productCode&#x3D;vm&amp;utm_source&#x3D;x3x37fab" rel="noopener" target="_blank"><i class="gift fa-fw"></i>阿里云幸运券</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.wellcoding.win/2022/04/19/2022-04-19-a-first-look-into-zgc.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.jpg">
+      <meta itemprop="name" content="旺旺小学酥">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="旺旺小学酥的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          技术分享：初识ZGC
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-04-19 18:53:28" itemprop="dateCreated datePublished" datetime="2022-04-19T18:53:28+08:00">2022-04-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-06 18:40:56" itemprop="dateModified" datetime="2023-03-06T18:40:56+08:00">2023-03-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Technology/" itemprop="url" rel="index"><span itemprop="name">Technology</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Technology/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Technology/Coding/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2022/04/19/2022-04-19-a-first-look-into-zgc.html" class="post-meta-item leancloud_visitors" data-flag-title="技术分享：初识ZGC" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/04/19/2022-04-19-a-first-look-into-zgc.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/04/19/2022-04-19-a-first-look-into-zgc.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1>一、ZGC 介绍</h1>
+<p>ZGC（Z Garbage Collector）是一种可扩展的低延迟垃圾收集器，旨在满足以下目标：</p>
+<ul>
+<li>亚毫秒最大停顿时间<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>（Sub-millisecond max pause times）；</li>
+<li>停顿时间不会随着堆的大小，或者活跃对象的大小而增加（Pause times do not increase with the heap, live-set or root-set size）；</li>
+<li>支持8MB到16TB的堆（Handle heaps ranging from a 8MB to 16TB in size）。</li>
+</ul>
+<a id="more"></a>
+<p>ZGC最初在JDK11中作为一项实验性功能引入，JDK13将支持的最大堆从4T增加到16T，JDK14将最小堆支持到8M，在JDK15中宣布可用于生产，JDK16发布之后实现了最大停顿时间不超过1ms，使用参数<code>–XX:+UseZGC</code>就可以开启ZGC。</p>
+<p>官网关于ZGC的关键词：并发（Concurrent）、基于区域（Region-based）、压缩（Compacting）、NUMA<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>感知（NUMA-aware）、使用染色指针<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup>（Using colored pointers）、使用读屏障（Using load barriers）。</p>
+<h1>二、GC过程</h1>
+<p>ZGC依旧采用标记-复制算法，在标记、转移、重定位阶段几乎都是并发进行的，这也是ZGC可以实现亚毫秒级停顿的关键原因。只有三个STW阶段：初始标记、再标记、初始转移。</p>
+<blockquote>
+<ol>
+<li><strong>初始标记(Phase 1: Pause Mark Start)</strong><br>
+这个阶段需要STW，切换到marked视图，为并发标记做准备。JDK16之前会在这个阶段标记GC ROOT，之后改为并发标记GC ROOT。</li>
+<li><strong>并发标记(Phase 2: Concurrent Mark)</strong><br>
+遍历整个堆中存活的对象，并将其指针染色。顺便还会修复坏指针。</li>
+<li><strong>完成初始标记(Phase 3: Pause Mark End)</strong><br>
+这个阶段会STW，判断标记是否完成。</li>
+<li><strong>并发标记释放(Phase 4: Concurrent Mark Free)</strong><br>
+释放所有未使用的标记堆栈空间。</li>
+<li><strong>并发处理软引用、弱引用(Phase 5: Concurrent Process Non-Strong References)</strong></li>
+<li><strong>并发重置转移集(Phase 6: Concurrent Reset Relocation Set)</strong><br>
+重置Relocation Set。</li>
+<li><strong>验证(Phase 7: Pause Verify)</strong><br>
+验证GC状态。</li>
+<li><strong>并发选择转移集(Phase 8: Concurrent Select Relocation Set)</strong><br>
+一次GC中可能会有很多分区可以被回收，在这个阶段会选择回收价值较高的分区，把他们放入Relocation Set。</li>
+<li><strong>初始转移(Phase 9: Pause Relocate Start)</strong><br>
+切换到remapped视图，为并发转移做准备。</li>
+<li><strong>并发转移(Phase 10: Concurrent Relocate)</strong><br>
+遍历Relocation Set，将存活的对象迁移。</li>
+</ol>
+</blockquote>
+<h1>三、关键技术</h1>
+<h2 id="3-1-内存多重映射">3.1 内存多重映射</h2>
+<p>使用mmap将不同的虚拟内存地址映射到同一物理地址上。如下图：</p>
+<img data-src="https://www.plantuml.com/plantuml/svg/SoWkIImgAStDuKfCJyqhKNWnSzQpxlbFsrgVhftXcrYKdPfYW5F648jCK6fkOa51QWeNLqfYIM9IOd6gmlFEbSydj46akRYAI_ABWDeKdkwQydpAYgVzwryiRuJ9OOefwEhQONKJqKeDYL4ATpKMgy2AKVo0nHByYc36OwfoICrB0GO-0000" />
+<p>当应用创建对象时，会在堆上申请一个虚拟地址，ZGC会为这个对象在Marked0、Marked1和Remapped三个视图上分别申请一个虚拟地址，这三个虚拟地址映射到同一个物理地址，这三个视图在同一时间只有一个是有效的，ZGC就是通过切换这三个视图实现并发的垃圾回收。</p>
+<h2 id="3-2-染色指针">3.2 染色指针</h2>
+<p>之前的垃圾收集器是将GC信息存在对象头的Mark Word中（在64位虚拟机中0～1位锁标志，2～63位GC标记及分代年龄），ZGC将GC信息放在对象指针中，0～43位为对象地址，44～47位为标志位，其余16位为0，因此ZGC最大可以管理16TB（2<sup>44</sup>）内存。通过这四个标志位，JVM 不用访问对象就可以直接从指针上分辨出对象的三色标记状态（Marked0、Marked1）、是否进入了重分配集（Remapped）、是否需要通过 finalize 方法来访问到（Finalizable）。</p>
+<h2 id="3-3-内存布局">3.3 内存布局</h2>
+<p>G1将整个堆内存分成了大小相同的Region，每个Region的大小可以通过<code>-XX:G1HeapRegionSize</code>来设置，大小为1～32MB（必须是2<sup>n</sup>），默认有2048个Region，因此，G1能管理的最大堆内存为64GB（2048*32MB），最小堆内存为2GB（2048*1MB）。</p>
+<p>ZGC的堆与G1类似，也是基于Region分布的，不同的地方在于ZGC不分代、动态创建和销毁以及大小不固定，包括三种类型的Region：</p>
+<ul>
+<li><strong>Small Region</strong>：2MB，主要用于放置小于256KB的小对象。</li>
+<li><strong>Medium Region</strong>：32MB，主要用于放置大于等于256KB小于4MB的对象。</li>
+<li><strong>Large Region</strong>：N*2MB，这个类型的Region是可以动态变化的，不过必须是2MB的整数倍，最小支持4MB。每个Large Region只放置一个大对象，并且是不会被重分配的。</li>
+</ul>
+<h2 id="3-4-读屏障-load-barrier">3.4 读屏障(Load Barrier)</h2>
+<p>读屏障类似Spring AOP的前置增强，JVM在应用代码中插入一小段代码，当线程从<strong>堆中读取对象的引用</strong>时，就会执行这段代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Object o = obj.FieldA   <span class="comment">// 从堆中读取引用，需要加入屏障</span></span><br><span class="line">&lt;Load barrier&gt;</span><br><span class="line">Object p = o  <span class="comment">// 无需加入屏障，因为不是从堆中读取引用</span></span><br><span class="line">o.dosomething() <span class="comment">// 无需加入屏障，因为不是从堆中读取引用</span></span><br><span class="line"><span class="keyword">int</span> i =  obj.FieldB  <span class="comment">//无需加入屏障，因为不是对象引用</span></span><br></pre></td></tr></table></figure>
+<p>读屏障的作用：由于GC线程和应用线程是并行执行的，就会存在某一时刻对象A中引用对象B，此时对象B已被转移，也就是两个对象处在不同的视图中，当应用线程去读取对象B时，就会发现对象B已被转移，就可以修正对象的引用，获取到的也是最新的引用。</p>
+<img data-src="https://www.plantuml.com/plantuml/svg/SoWkIImgAStDuU82ixYiNgpV_RH_sjC5RKzsh7q-g-Nf-fqlDYwq1ehld_sqTIb8TcF_orbphBcuCjCKD9xEsV1qRiEBvMrFP-zxlhRpoQw-ftidF-tiXOYytpDVKw4a8pLFGUFPZFMQN0eALi-cBtWvf-7fafRd4zgikL9pYbE1XanO1f9JK02P-6pjugTpLhpOk-RvyjsO-a40vXImacUJUv_i1Re6985c6jp46Uk1Oa_tx7gwP-hpAIkm6ufayBC5xI_MRK0s68VXS1qlstkVhflrP6ylXgQybCmqBWGBGWA3Eh-0Yyi1o0E6F000" />
+<h2 id="3-5-堆栈水印屏障-stack-watermark-barrier">3.5 堆栈水印屏障(Stack Watermark Barrier)</h2>
+<p>众所周知，STW发生在安全点（safe-point），之前的垃圾收集器会在STW期间标记GC Root，这个过程需要扫描线程堆栈，如果应用拥有大量线程，那么STW的时间就会增加，如果这些线程的调用栈很深的话，这个时间会更长。从JDK16开始，扫描线程堆栈变成了并发进行。</p>
+<p>在应用线程运行的同时，去扫描线程堆栈，就需要用到一个叫做堆栈水印屏障的技术。这是一种可以防止线程在没有检查是否安全的情况下返回栈帧的机制。具体细节可以查看 <a href="http://openjdk.java.net/jeps/376" target="_blank" rel="noopener">JEP 376: ZGC: Concurrent Thread-Stack Processing</a>。</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1"  class="footnote-item"><p>JDK16发布以后停顿时间已经缩小到1毫秒以内，并且时间复杂度为O(1)。 <a href="#fnref1" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn2"  class="footnote-item"><p>非一致性内存访问，一种硬件层面的特性。统一内存访问，即任何CPU操作访问内存时间都一样。 <a href="#fnref2" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn3"  class="footnote-item"><p>染色指针是一种将信息存储在指针中的技术。 <a href="#fnref3" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</section>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="document.getElementById('post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div id="post-reward">
+      
+      <div>
+        <img src="/images/wechatpay.jpg" alt="旺旺小学酥 微信">
+        <p>微信</p>
+      </div>
+      
+      <div>
+        <img src="/images/alipay.jpg" alt="旺旺小学酥 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>旺旺小学酥
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://blog.wellcoding.win/2022/04/19/2022-04-19-a-first-look-into-zgc.html" title="技术分享：初识ZGC">https://blog.wellcoding.win/2022/04/19/2022-04-19-a-first-look-into-zgc.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Sharing/" rel="tag"><i class="fa fa-tag"></i> Sharing</a>
+              <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
+              <a href="/tags/GC/" rel="tag"><i class="fa fa-tag"></i> GC</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/12/06/2021-12-06-build-container-image-with-jib.html" rel="prev" title="技术分享：使用Jib构建容器镜像">
+      <i class="fa fa-chevron-left"></i> 技术分享：使用Jib构建容器镜像
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/02/15/2023-02-15-java-basic-generics.html" rel="next" title="技术分享：Java 泛型">
+      技术分享：Java 泛型 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">旺旺小学酥</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261890002&web_id=1261890002"></script>
+  </div>
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    new Valine(Object.assign({
+      el  : '#valine-comments',
+      path: location.pathname,
+    }, {"enable":true,"appId":"dclpovHlOmTXcdX6TgNBXzd0-gzGzoHsz","appKey":"o39h9a24qOLeVNJcxm7coaVk","placeholder":"Just go go","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"language":"zh-cn","visitor":true,"comment_count":true,"recordIP":true,"serverURLs":null}
+    ));
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
